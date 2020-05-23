@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Program;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,23 +15,48 @@ class WildController extends AbstractController
      */
     public function index() :Response
     {
+        $programs = $this->getDoctrine()
+            ->getRepository(Program::class)
+            ->findAll();
+        if (!$programs) {
+            throw $this->createNotFoundException('No program found in program\'s table.');
+        }
         return $this->render('wild/index.html.twig', [
-            'website' => 'Wild Series',
+            'programs' => $programs
         ]);
     }
 
     /**
+     * @param string $slug The slugger
      * @Route("/wild/show/{slug}",
-     *     requirements={"slug"="[0-9a-z\-]+"},
+     *     requirements={"slug"="^[0-9a-z-]+$"},
      *     defaults={"slug"=null},
      *     name="wild_show")
+     * @return Response
      */
-    public function show($slug) :Response
+    public function show(?string $slug) :Response
     {
-        $slugRepl = str_replace("-", " ", $slug);
-        $slugMaj = ucwords($slugRepl);
-        return $this->render('wild/show.html.twig',
-            ['slug' => $slugMaj]);
+        if (!$slug) {
+            throw $this->createNotFoundException(
+                'No slug has been sent to find a program in program\'s table.');
+        }
+        $slug = preg_replace(
+            '/-/',
+            ' ', ucwords(trim(strip_tags($slug)), "-")
+        );
+        $program = $this->getDoctrine()
+            ->getRepository(Program::class)
+            ->findOneBy(['title' => mb_strtolower($slug)]);
+        if (!$program) {
+            throw $this->createNotFoundException(
+                'No program with '.$slug.' title, found in program\'s table.'
+            );
+        }
+
+        return $this->render('wild/show.html.twig', [
+            'program' => $program,
+            'slug'  => $slug,
+        ]);
     }
 
 }
