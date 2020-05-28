@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Categorie{% endblock %}
+
+{% block body %}
+    <h2>Entrez une nouvelle catégorie :</h2>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    <button type="submit" name="btnSearch">Envoyer</button>
+    {{ form_end(form) }}
+    <br><br>
+    <a href="{{ path('show_category', { 'categoryName': "horreur" }) }}">Voir les catégories</a>
+    <br><br>
+    <a href="{{ path('app_index') }}">Retour à l'accueil</a>
+{% endblock %}

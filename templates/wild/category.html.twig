@@ -3,6 +3,16 @@
 {% block title %}Categories{% endblock %}
 
 {% block body %}
+        <h1>Liste des catégories :</h1>
+        {% for category in categories %}
+        <ul>
+            <li><h2>{{ category.name }}</h2></li>
+        </ul>
+        {% endfor %}
+
+    <div>
+        <a href="{{ path('add_category') }}">Ajouter une catégorie</a>
+    </div>
     <h1>Les 3 dernières séries de la catégorie {{ categoryName }} : </h1>
     {% for program in programs %}
         <div>
@@ -12,7 +22,5 @@
     {% else %}
         Aucune série trouvée.
     {% endfor %}
-    <a href="{{ path('app_index') }}">
-        Retour à l'accueil
-    </a>
+    <a href="{{ path('app_index') }}">Retour à l'accueil</a>
 {% endblock %}
