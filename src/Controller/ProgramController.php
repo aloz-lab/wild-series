@@ -6,9 +6,12 @@ use App\Entity\Program;
 use App\Form\ProgramType;
 use App\Repository\ProgramRepository;
 use App\Service\Slugify;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,7 +36,7 @@ class ProgramController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request, Slugify $slugify): Response
+    public function new(Request $request, Slugify $slugify, MailerInterface $mailer): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -46,7 +49,21 @@ class ProgramController extends AbstractController
             $entityManager->persist($program);
             $entityManager->flush();
 
-            return $this->redirectToRoute('program_index');
+            $email = (new TemplatedEmail())
+                ->from($this->getParameter('mailer_from'))
+                ->to('newuser@example.com')
+                ->subject('Une nouvelle série vient d\'être publiée !')
+                ->htmlTemplate('program/email/notification.html.twig')
+                ->context(['program' => $program]);
+            $mailer->send($email);
+
+            $content = $this->renderView(
+                'program/email/notification.html.twig',
+                ['program' => $program]
+            );
+            return new Response($content);
+
+            //return $this->redirectToRoute('program_index');
         }
 
         return $this->render('program/new.html.twig', [
