@@ -21,14 +21,17 @@
     <strong>Séries associées à cet acteur :</strong>
     <ul>
         {% for program in actor.programs %}
-            <li><a href="{{ path('program_show', {'id': program.id}) }}">{{ program.title }}</a></li>
+            <li><a href="{{ path('program_show', {'slug': program.slug}) }}">{{ program.title }}</a></li>
         {% else %}
             <li>Aucune série pour cet acteur</li>
         {% endfor %}
     </ul>
-
-    {#<a href=" ">Edit actor</a>#}
-
+    <br>
+    <a href="{{ path('actor_index') }}">back to list</a>
+    <br>
+    <a href="{{ path('actor_edit', {'slug': actor.slug}) }}">edit</a>
+    <br>
+    {{ include('actor/_delete_form.html.twig') }}
     <br><br>
     <a href="{{ path('actor_index') }}">Retour à la liste des acteurs</a>
 {% endblock %}
