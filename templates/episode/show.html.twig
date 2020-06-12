@@ -3,6 +3,12 @@
 {% block title %}Episode{% endblock %}
 
 {% block body %}
+    {% if app.user %}
+        Vous êtes connecté en tant que {{ app.user.email }}
+        <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}"> Se connecter</a>
+    {% endif %}
     <h1>Episode</h1>
 
     <table class="table">
@@ -25,12 +31,53 @@
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('episode_index') }}">back to list</a>
     <br>
     <a href="{{ path('episode_edit', {'slug': episode.slug}) }}">edit</a>
     <br>
     {{ include('episode/_delete_form.html.twig') }}
     <br><br>
+    <h2>Commentaires</h2>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <br>
+        <!--<a href="{{ path('comment_new') }}">Ajouter un commentaire</a>-->
+        <h3>Ajouter un commentaire</h3>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+            {#"{{ form_widget(form.comment) }}
+            {{ form_widget(form.rate) }}#}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+
+        {#{{ include('comment/_form.html.twig') }}#}
+    {% endif %}
+    <ul>
+        {% for comment in episode.comments %}
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ comment.id }}</td>
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ comment.comment }}</td>
+                </tr>
+                <tr>
+                    <th>Rate</th>
+                    <td>{{ comment.rate }}</td>
+                </tr>
+                <tr>
+                    <th>Auteur</th>
+                    <td>{{ comment.author }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+        {% else %}
+            <li>Aucun commentaire pour cet épisode</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ path('episode_index') }}">Retour à la liste des épisodes</a>
+    <br>
     <a href="{{ path('program_index') }}">Retour à la liste des séries</a>
 {% endblock %}
