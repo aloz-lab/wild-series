@@ -1,13 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Bienvenue sur Wildseries !</h1>
+    <h1>Bienvenue sur Wildseries !</h1>
     {% if app.user %}
         {{ app.user.email }}
         <a href="{{ path('app_logout') }}"> Se déconnecter</a>
     {% else %}
         <a href="{{ path('app_login') }}"> Se connecter</a>
     {% endif %}
+    {% if is_granted('ROLE_SUBSCRIBER') %}
     <br><br>
     <a href="{{ path('program_index') }}">Liste des séries</a>
     <br><br>
@@ -16,16 +17,16 @@
     <a href="{{ path('episode_index') }}">Liste des épisodes</a>
     <br><br>
     <a href="{{ path('actor_index') }}">Liste des acteurs</a>
+    {% else %}
     <br><br><br>
-    <a href="{{ path('wild_index') }}">
-        Testing index() method from WildController to view all programs.
-    </a>
+        <a href="{{ path('wild_index') }}">Liste des séries</a>
+    {% endif %}
     <br><br>
-    <a href="{{ path('wild_show', { 'slug': "walking-dead" }) }}">
-        Testing show() method from WildController with a real program's slug.
+    <!--<a href="{{ path('wild_show', { 'slug': "walking-dead" }) }}">
+    Testing show() method from WildController with a real program's slug.
     </a>
     <br><br>
     <a href="{{ path('show_category', { 'categoryName': "horreur" }) }}">
-        Testing showByCategory() method from WildController with a real category's name.
-    </a>
+    Testing showByCategory() method from WildController with a real category's name.
+    </a>-->
 {% endblock %}

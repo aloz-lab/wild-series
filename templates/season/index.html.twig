@@ -3,6 +3,12 @@
 {% block title %}Season index{% endblock %}
 
 {% block body %}
+    {% if app.user %}
+        {{ app.user.email }}
+        <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}"> Se connecter</a>
+    {% endif %}
     <h1>Season index</h1>
 
     <table class="table">
@@ -23,8 +29,10 @@
                 <td>{{ season.year }}</td>
                 <td>{{ season.description }}</td>
                 <td>
-                    <a href="{{ path('season_show', {'id': season.id}) }}">show</a>
-                    <a href="{{ path('season_edit', {'id': season.id}) }}">edit</a>
+                    <a href="{{ path('season_show', {'id': season.id}) }}">Show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('season_edit', {'id': season.id}) }}">Edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -34,7 +42,9 @@
         {% endfor %}
         </tbody>
     </table>
-    <a href="{{ path('season_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('season_new') }}">Create new</a>
+    {% endif %}
     <br><br><br>
     <a href="{{ path('episode_index') }}">Liste des épisodes</a>
     <br><br>

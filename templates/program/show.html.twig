@@ -3,6 +3,12 @@
 {% block title %}Program{% endblock %}
 
 {% block body %}
+    {% if app.user %}
+        {{ app.user.email }}
+        <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}"> Se connecter</a>
+    {% endif %}
     <h1>Program</h1>
 
     <table class="table">
@@ -43,10 +49,11 @@
         {% endfor %}
     </ul>
 
-    {#<a href="{{ path('program_index') }}">back to list</a>#}
-    <a href="{{ path('program_edit', {'slug': program.slug}) }}">Edit program</a>
-    <br><br>
-    {{ include('program/_delete_form.html.twig') }}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('program_edit', {'slug': program.slug}) }}">Edit program</a>
+        <br><br>
+        {{ include('program/_delete_form.html.twig') }}
+    {% endif %}
     <br><br>
     <a href="{{ path('program_index') }}">Retour à la liste des séries</a>
 {% endblock %}

@@ -3,6 +3,13 @@
 {% block title %}Program index{% endblock %}
 
 {% block body %}
+    {% if app.user %}
+        {{ app.user.email }}
+        <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}"> Se connecter</a>
+    {% endif %}
+
     <h1>Program index</h1>
 
     <table class="table">
@@ -27,8 +34,10 @@
                 <td>{{ program.country }}</td>
                 <td>{{ program.year }}</td>
                 <td>
-                    <a href="{{ path('program_show', {'slug': program.slug}) }}">show</a>
-                    <a href="{{ path('program_edit', {'slug': program.slug}) }}">edit</a>
+                    <a href="{{ path('program_show', {'slug': program.slug}) }}">Show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('program_edit', {'slug': program.slug}) }}">Edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -38,7 +47,9 @@
         {% endfor %}
         </tbody>
     </table>
-    <a href="{{ path('program_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('program_new') }}">Create new</a>
+    {% endif %}
     <br><br>
     <a href="{{ path('season_index') }}">Liste des saisons</a>
     <br><br>

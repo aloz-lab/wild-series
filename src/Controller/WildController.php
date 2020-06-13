@@ -70,10 +70,12 @@ class WildController extends AbstractController
             );
         }
         $seasons = $program->getSeasons();
+        $actors = $program->getActors();
         return $this->render('wild/show.html.twig', [
             'program' => $program,
             'slug'  => $slug,
-            'seasons' => $seasons
+            'seasons' => $seasons,
+            'actors' => $actors
         ]);
     }
 
@@ -149,7 +151,7 @@ class WildController extends AbstractController
 
     /**
      * @Route("wild/actor/{id}", name="wild_actor")
-     * @param Actor $actor
+     *
      * @return Response
      */
     public function showActor(Actor $actor) :Response
@@ -158,7 +160,7 @@ class WildController extends AbstractController
 
         return $this->render('wild/actor.html.twig', [
             'programs' => $programs,
-            'actor'  => $actor,
+            'actor'  => $actor
         ]);
     }
 

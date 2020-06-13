@@ -3,6 +3,12 @@
 {% block title %}Actor index{% endblock %}
 
 {% block body %}
+    {% if app.user %}
+        {{ app.user.email }}
+        <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}"> Se connecter</a>
+    {% endif %}
     <h1>Actor index</h1>
 
     <table class="table">
@@ -19,8 +25,10 @@
                 <td>{{ actor.id }}</td>
                 <td>{{ actor.name }}</td>
                 <td>
-                    <a href="{{ path('actor_show', {'slug': actor.slug}) }}">show</a>
-                    <a href="{{ path('actor_edit', {'slug': actor.slug}) }}">edit</a>
+                    <a href="{{ path('actor_show', {'slug': actor.slug}) }}">Show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('actor_edit', {'slug': actor.slug}) }}">Edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -31,7 +39,9 @@
         </tbody>
     </table>
     <br>
-    <a href="{{ path('actor_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('actor_new') }}">Create new</a>
+    {% endif %}
     <br><br>
     <a href="{{ path('program_index') }}">Retour à la liste des séries</a>
 {% endblock %}

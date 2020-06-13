@@ -3,12 +3,20 @@
 {% block title %}All programs{% endblock %}
 
 {% block body %}
-    <h1>Toutes les séries de la table program : </h1>
+    <a href="{{ path('app_index') }}">Retour à l'accueil</a>
+    <br>
+    {% if app.user %}
+        {{ app.user.email }}
+        <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}"> Se connecter</a>
+    {% endif %}
+    <h1>Toutes les séries : </h1>
     {% for program in programs %}
         <div>
-            {#<h2><a href="{{ path('wild_show', { 'title': program.title }) }}">{{ loop.index }} / {{ program.title }} - Catégorie : {{ program.category.name }}</a></h2>#}
-            <h2>{{ loop.index }} / {{ program.title }} - Catégorie : {{ program.category.name }}</h2>
-            <p>{{ program.summary }}</p>
+            <h2><a href="{{ path('wild_show', { 'slug': program.slug }) }}">{{ loop.index }} / {{ program.title }}</a></h2><strong>Catégorie : </strong>{{ program.category.name }}
+            {#<h2>{{ loop.index }} / {{ program.title }} - Catégorie : {{ program.category.name }}</h2>#}
+            <p><strong>Synopsis : </strong>{{ program.summary }}</p>
         </div>
     {% else %}
         Aucune série trouvée.
@@ -24,6 +32,4 @@
     {{ form_row(form.name) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
     {{ form_end(form) }}#}
-    <br><br>
-    <a href="{{ path('app_index') }}">Retour à l'accueil</a>
 {% endblock %}
