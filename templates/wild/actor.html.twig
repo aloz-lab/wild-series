@@ -1,23 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="media">
-        <div class="media-body">
-            <h1 class="mt-0">Acteur : {{ actor.name }}</h1>
-            <h2>Liste des séries :</h2>
-            {% for program in programs %}
-                <div>
-                    <a href="{{ path('program_show', { 'slug': program.slug }) }}">{{ program.title }}</a>
-                </div>
-                <br>
-            {% else %}
-                Aucune série trouvée.
-            {% endfor %}
+    <div class="container bg-dark">
+        <div class="card bg-dark">
+            <div class="card-header bg-dark text-white">
+                <h4>Acteur : {{ actor.name }}</h4>
+            </div>
+            <div class="card-body bg-dark text-white">
+                <h4 class="card-title">Séries dans lesquelles {{ actor.name }} joue :</h4>
+                {% for program in programs %}
+                    <div>
+                        <a href="{{ path('wild_show', { 'slug': program.title | lower | replace({' ': '-'}) }) }}">{{ program.title }}</a>
+                    </div>
+                    <br>
+                {% else %}
+                    Aucune série trouvée.
+                {% endfor %}
+            </div>
         </div>
     </div>
-    <!--<a href="{#{{ path('wild_show', { 'slug': program.title | lower | replace({' ': '-'}) }) }}">Voir la série {{ program.title }}#}</a>-->
-    <br><br>
-    <a href="{{ path('wild_index') }}">Retour à la liste des séries</a>
+    <div class="container bg-dark mt-4">
+        <ul class="list-group">
+            <li class="list-group-item bg-dark text-white border-0"><a href="{{ path('wild_index') }}">Retour à la liste des séries</a></li>
+        </ul>
+    </div>
+
     <br><br>
     <a href="{{ path('app_index') }}">Retour à l'accueil</a>
 {% endblock %}

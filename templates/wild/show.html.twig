@@ -9,34 +9,58 @@
     {% else %}
         <a href="{{ path('app_login') }}"> Se connecter</a>
     {% endif %}
-    <div class="media">
-        <img class="align-self-start mr-3" src="{{program.poster}}" alt="{{ program.title }} poster">
-        <div class="media-body">
-            <h1 class="mt-0">{{ program.title }}</h1>
-            <p>{{ program.summary }}</p>
-            <p>Categorie : {{ program.category.name }}</p>
-            <h2>Saisons :</h2>
-            {% for season in seasons %}
-                <div>
-                    <a href="{{ path('wild_season', { 'id': season.id }) }}">Saison {{ season.number }}
+    <div class="container bg-dark">
+        <div class="mt-4 col-sm-12 col-md-12">
+            <div class="card bg-dark border-danger">
+                <div class="row no-gutters">
+                    <div class="col-sm-12 col-md-5">
+                        <img class="card-img-top border border-danger" src="{{program.poster}}" alt="{{ program.title }} poster">
+                    </div>
+                    <div class="col-sm-10 col-md-7">
+                        <div class="card-body">
+                            <div class="card-body bg-dark text-white">
+                                <h2 class="card-title">{{ program.title }}</h2>
+                                <a href="{{ path('wild_index') }}">Retour à la liste des séries</a>
+                                <p class="card-text mt-4"><strong>Synopsis :</strong></p>
+                                <p class="card-text">{{ program.summary }}</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-dark text-white"><strong>Catégorie : </strong>{{ program.category.name }}</li>
+                                <li class="list-group-item bg-dark text-white"><strong>Pays : </strong>{{ program.country }}</li>
+                                <li class="list-group-item bg-dark text-white"><strong>Année : </strong>{{ program.year }}</li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body bg-dark text-white">
+                                <h3 class="mb-4">Saisons :</h3>
+                                {% for season in seasons %}
+                                    <div>
+                                        <a href="{{ path('wild_season', { 'id': season.id }) }}">Saison {{ season.number }}</a>
+                                    </div>
+                                    <br>
+                                {% else %}
+                                    Aucune saison trouvée.
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body bg-dark text-white">
+                                <h3 class="mb-4">Acteurs :</h3>
+                                {% for actor in actors %}
+                                    <div>
+                                        <a href="{{ path('wild_actor', { 'id': actor.id }) }}">{{ actor.name }}
+                                    </div>
+                                    <br>
+                                {% else %}
+                                    Aucun acteur trouvé.
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <br>
-            {% else %}
-                Aucune saison trouvée.
-            {% endfor %}
-            <h2>Acteurs :</h2>
-            {% for actor in actors %}
-                <div>
-                    <a href="{{ path('wild_actor', { 'id': actor.id }) }}">{{ actor.name }}
-                </div>
-                <br>
-            {% else %}
-                Aucun acteur trouvé.
-            {% endfor %}
+            </div>
         </div>
     </div>
-    <br><br>
-    <a href="{{ path('wild_index') }}">Retour à la liste des séries</a>
     <br><br>
     <a href="{{ path('app_index') }}">Retour à l'accueil</a>
 {% endblock %}

@@ -8,19 +8,45 @@
     {% if app.user %}
         {{ app.user.email }}
         <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+        <br><br>
+        <a href="{{ path('app_profile') }}"> Voir mon profil</a>
     {% else %}
         <a href="{{ path('app_login') }}"> Se connecter</a>
     {% endif %}
-    <h1>Toutes les séries : </h1>
-    {% for program in programs %}
-        <div>
-            <h2><a href="{{ path('wild_show', { 'slug': program.slug }) }}">{{ loop.index }} / {{ program.title }}</a></h2><strong>Catégorie : </strong>{{ program.category.name }}
-            {#<h2>{{ loop.index }} / {{ program.title }} - Catégorie : {{ program.category.name }}</h2>#}
-            <p><strong>Synopsis : </strong>{{ program.summary }}</p>
+    <div class="card bg-dark">
+        <div class="card-header bg-danger text-white">
+            <h3 class="text-center text-dark pt-2">Toutes les séries</h3>
         </div>
-    {% else %}
-        Aucune série trouvée.
-    {% endfor %}
+    </div>
+    <div class="container bg-dark">
+        <div class="row">
+            {% for program in programs %}
+                <div class="mt-4 col-sm-6 col-md-5 col-lg-4">
+                    <div class="card bg-danger">
+                        <img src="{{ program.poster }}" class="card-img-top" alt="{{ program.title }}" style="height: 435px;">
+                        <div class="card-body bg-dark text-white">
+                            <h3 class="card-title" style="height: 68px;">{{ program.title }}</h3>
+                            <p class="card-text"><strong>Synopsis :</strong></p>
+                            <p class="card-text" style="height: 250px;">{{ program.summary }}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-dark text-white"><strong>Catégorie : </strong>{{ program.category.name }}</li>
+                        </ul>
+                        <div class="card-body bg-dark text-white">
+                            <a href="{{ path('wild_show', { 'slug': program.slug }) }}" class="card-link">Détails</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                Aucune série trouvée.
+            {% endfor %}
+        </div>
+    </div>
+        <!--<div>
+            <h2><a href="{#{{ path('wild_show', { 'slug': program.slug }) }}">{{ loop.index }} / {{ program.title }}</a></h2><strong>Catégorie : </strong>{{ program.category.name }}
+            <p><strong>Synopsis : </strong>{{ program.summary }}#}</p>
+        </div>-->
+
     <br><br>
     {#{% form_theme form 'foundation_5_layout.html.twig' %}
     {#{{ form_start(form) }}

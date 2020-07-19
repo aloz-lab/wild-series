@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="container text-white col-sm-10 col-md-8 col-lg-6">
+        <h3 class="my-5 font-weight-normal">Inscrivez-vous</h3>
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword) }}
+            {{ form_row(registrationForm.agreeTerms) }}
+
+            <button class="btn btn-lg btn-danger text-dark">Register</button>
+        {{ form_end(registrationForm) }}
+    </div>
+    <br><br>
+    <a href="{{ path('app_index') }}">Retour à l'accueil</a>
+{% endblock %}
